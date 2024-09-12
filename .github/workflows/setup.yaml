@@ -1,0 +1,36 @@
+name: Setup
+
+on:
+  create
+
+jobs:
+  setup:
+    if: github.event.ref == github.event.master_branch
+    name: Setup
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          check-latest: true
+      - run: |
+          node -v > .node-version
+          corepack enable
+          yarn init -p -2
+          npm pkg set type=module
+          yarn add -D turbo @turbo/gen typescript vitest @vitest/coverage-v8
+          yarn dlx @yarnpkg/sdks vscode
+
+      - uses: actions/upload-artifact@v4
+        with:
+          path: "."
+
+
+
+
+
+
+
